@@ -1,0 +1,60 @@
+day2_封装
+1.封装 Request类
+	private String reqMethod;//请求方法
+	private String reqUrl;   //url
+	private String protocol; //协议版本
+	private Map<String,String> reqHead; //请求头
+	private Map<String,String> reqBody; //请求体(请求消息)
+
+	interface Request
+	封装属性的对应get方法
+	public String getMethod();
+	public String getUrl();
+	public String get protocol();
+	public Map<String,String> get reqHead();
+	public Map<String,String> reqBody();
+
+	RequestImp实现接口Request
+
+	1.接收数据  2.拆分数据到数据成员中
+	在构造器中实现以上功能
+
+
+2.封装 Response类
+	属性:
+		socket,url,ps
+		resourcePath,errorFile,welFile
+	构造器
+	public ResponseImpl(Socket socket,String url){
+		this.socket = socket;
+		this.url = url;
+		ps = new PS;
+
+		resourcePath = Finder.getValue();
+		errorFile = Finder.getValue();
+		welFile = Finder.getValue();
+		file = new File(resourcePath,url);
+
+	}
+
+		//生成响应行
+		public String getResLine();
+		//生成响应头
+		public String getResHeader();
+		//发送响应体
+		public void sendResBody();
+		
+		//发送符合http的响应信息
+		public void sendHttpResource() {
+			String resLine = getResLine();
+			ps.println(resLine);
+			
+			//Content-Type: *;url：a.txt.txt
+			String resHeader = getResHeader("Content-Type",*Finder.getType("后缀名"));
+			ps.println(resHeader);
+			
+			//发送空行
+			ps.println();
+			//发送响应体
+			sendResBody();
+		}	

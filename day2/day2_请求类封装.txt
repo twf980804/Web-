@@ -1,0 +1,84 @@
+1.封装 Request类
+	private String reqMethod;//请求方法
+	private String reqUrl;   //url
+	private String protocol; //协议版本
+	private Map<String,String> reqHead; //请求头
+	private Map<String,String> reqBody; //请求体(请求消息)
+
+接口的好处:便于程序的扩展
+interface Request
+	封装属性的对应get方法
+	public String getMethod();
+	public String getUrl();
+	public String get protocol();
+	public Map<String,String> get reqHead();
+	public Map<String,String> reqBody();
+
+RequestImp实现接口Request
+
+	1.接收数据  2.拆分数据到数据成员中
+	在构造器中实现以上功能
+		public ResponceImp(Socket socket){
+			this.socket = socket;
+			headMap = new HashMap<>();
+			bodyMap = new HashMap<>();
+			getInfos(); 
+		}
+		private void getInfos(){
+			//准备流读取数据
+				br;
+			//第一部分:读到请求行
+				String reqLine =br.readLine();
+				if(reqLine == bull){//解决浏览器重复刷新的问题
+					return;//判断后直接返回,因此在run方法中拿到url也需要判断if(url == null),也需要返回
+				}
+				arr = reqLine.split();
+				if(arr.length!=3){
+					return;
+				}
+				reqMethod = arr[0]
+				reqUrl = arr[1]
+				protocol = arr[2]
+
+			//第二部分,获取拆分请求头
+			String hstr = null;
+			while(!"".equals((hstr = br.readLine))){
+				harr = hstr.split(": ");
+				if(harr.length == 2){
+					headMap.put(harr[0],harr[1]);
+				}
+			}
+			
+			//第三部分,拆分请求体
+			if(br.ready()){  //ready的返回值为true,说明是有值,是post
+				char[] buff = new char[1024];
+				int size = br.read(buff);
+				String bstr = new String(buff,0,size);
+
+				//拆分name=1&code=1,将以下代码抽取为方法splitBody(String bstr)
+				splitBody(bstr);
+				barr = bstr.split("&")
+				;	for(String s : barr){
+					arr = s.split("=")
+					if(arr.length 1= 2){
+						bodyMap.put(arr[0],"");
+					}else{
+						bodyMap.put(arr[0].arr[1]);
+					}
+
+				}	
+					}
+			}else{
+				//从url里面拆分body值  
+				   "/a.txt?name=zhangsan&code=188"
+				arr = url.split("[?]");
+				//1.url不存在body
+				if(arr.length == 1){
+					return;
+				}
+				//2.url存在body
+				//拆分arr[1](name=1&code=1)
+					splitBody(arr[1]);
+					url = arr[0];
+			}	
+		}

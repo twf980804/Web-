@@ -1,0 +1,94 @@
+web服务器项目
+1.项目背景
+2.项目引入
+3.项目需求
+	画图解释
+	补充:对于请求和响应的解释
+4.实现
+	1.单线程
+		1).创建服务器
+		2).接受客户端的连接
+		3).接收客户端的请求并输出
+		String line = null;
+        while (!"".equals(line=br.readLine())){
+            // while ((line=br.readLine())!=null){
+            System.out.println(line);
+        }
+        思考:为什么不能用null来判断
+		4).解析客户端的请求,拿到url
+		String str = br.readLine();//得到请求行
+		String[] array = str.split(" ");
+		System.out.println(array[1]);//得到url
+			1).判断请求的资源在服务器中是否存在
+				存在:判断是否为"/"
+					是:返回欢迎页面
+					否:用文件流将数据发送给浏览器
+				不存在:返回错误界面	
+		5).发送响应		
+			2).发送
+				1).发送响应行
+				2).发送消息体(可以为空)不写
+				3).发送空行
+				4).发送消息体,即请求的内容
+					将内容封装到file中使用缓冲字节流发送
+					 BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+        				int len;
+        				byte[] bytes = new byte[1024];
+        				while ((len = bis.read(bytes))!=-1){
+            				ps.write(bytes,0,len);
+        				}
+		
+	2.多线程实现
+		1.创建服务器,端口号由构造器初始化
+		new ServerSocket();
+		2.服务器循环接收客户端的连接	
+		while(true){}
+		3.将服务器接收客户端连接并作出相应处理的函数封装成方法receive();
+		public void receive();
+		4.创建线程并开启
+		5.使用实现Runnable的方式实现线程处理函数
+			思考:应该继承Thread还是实现Runnable接口,原因:单继承与多实现
+		6.自定义MyRunnable实现Runnable接口
+			1).	封装属性:socket,method,path,errorFile,welFile
+			2).构造器对socket做初始化
+			3)run方法
+				1).接收请求行,解析出url,封装成getUrl()方法
+					//从客户端读取数据,解析,返回url
+				    private String getUrl() throws Exception {
+				        String str = null;
+				        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				        str = br.readLine();
+				        String[] arr = str.split(" ");
+				        if (arr.length!=3){
+				            System.err.println("请求行格式有误"); //出错输出流
+				            throw new Exception("request Line is error!");
+				        }
+				        return arr[1];
+				    }
+				2).根据url作出判断,发送响应,封装成sendResponse
+					private void sendResponse(String url) throws IOException {
+				        PrintStream ps = new PrintStream(socket.getOutputStream());
+				        //判断资源文件是什么,并发送响应行
+				        File file = new File(path, url);
+				        if (file.exists()){
+				            if ("/".equals(url)){
+				                file = new File(path,welFile);
+				            }
+				            //发送文件存在的响应行
+				            ps.println("HTTP/1.1 200 OK");
+				        }else {
+				            file = new File(path,errorFile);
+				            ps.println("HTTP/1.1 400 NotFound");
+				        }
+				        //发送响应头(空)
+				        //发送空行
+				        ps.println();
+				        //发送响应体(文件内容)
+				        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+				        byte[] bytes = new byte[1024];
+				        int len;
+				        while ((len = bis.read(bytes))!=-1){
+				            String s = new String(bytes, 0, len);
+				            ps.println(s);
+				        }
+				    }

@@ -1,0 +1,11 @@
+多线程实现
+
+封装获取属性的方法
+	利用properties类完成
+		将所用到的属性写在config.properties中
+
+封装获取url的方法
+	private String getUrl();
+
+封装发送响应的方法
+	private void sendResponse(String url);	

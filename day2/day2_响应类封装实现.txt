@@ -1,0 +1,73 @@
+响应类封装实现
+	属性:
+		socket,url,ps
+		resourcePath,errorFile,welFile
+	构造器
+	public ResponseImpl(Socket socket,String url){
+		this.socket = socket;
+		this.url = url;
+		ps = new PS;
+
+		resourcePath = Finder.getValue();
+		errorFile = Finder.getValue();
+		welFile = Finder.getValue();
+		file = new File(resourcePath,url);
+
+	}
+
+	//生成响应行
+	public String getResLine(){
+		String resLine = "HTTP/1.1"
+
+		//根据uel来判断statusCode的值
+		int StatusCode = getStatusCode(url); //封装一个getStatusCode(url)方法根据url来获取状态码
+		/**********
+		private int getStatuCode(String url2) {
+        File f = new File(path,url2);
+        if (f.exists()){
+            if ("/".equals(url2))
+                url = welFile;
+            return 200;
+        }
+        url = errorFile;
+        return 404;
+    	}
+		/************
+		//获取描述信息,从status_code.properties中根据值获取
+        String statumsg = StatusFinder.getStatusMsg(statucode+"");
+
+        return resLine + " " + statucode + " " +statumsg;
+	}
+
+	//生成响应头(属性和属性值)
+	public String getResHeader();
+		//获取文件后缀名
+		String[] arr = url.split("[.]");
+        String name = arr[arr.length - 1];
+		//根据后缀名获取文件传输类型
+		String typeValue = MimeFinder.getMime(name);
+		return "Content-Type: " + typeValue;
+
+	//发送响应体
+	public void sendResBody();
+		bis BIS;
+		//读取数据然后发送到浏览器
+		while(bis.read(bytes)){
+			ps.write();
+		}
+
+
+	//发送符合http的响应信息
+		public void sendHttpResource() {
+			//发送响应行
+			String resLine = getResLine();
+            ps.println(resLine);
+			//发送响应头
+			String resHeader = getResHeader();
+            ps.println(resHeader);
+			//发送空行
+			ps.println();
+            ps.flush();
+			//发送响应体
+			sendResBody();
+		}	

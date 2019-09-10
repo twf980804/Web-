@@ -1,0 +1,8 @@
+day2
+
+封装请求类
+封装响应类
+
+封装获取属性的方法
+	利用properties类完成
+		将所用到的属性写在config.properties中

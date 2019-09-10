@@ -1,0 +1,4 @@
+server_port=9999
+resourcePath=E:\\BD1904\\src\\com\\briup\\java\\Project\\resource
+errorFile=error.html
+welFile=welcom.html

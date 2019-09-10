@@ -1,0 +1,115 @@
+Web服务器：
+	1.什么是web？
+	web的本意是蜘蛛网和网的意思，在网页设计中我们称为网页的意思。现广泛译作网络、互联网等技术领域。
+	表现为三种形式，即超文本（hypertext）、超媒体（hypermedia）、超文本传输协议（HTTP）等。
+	Web的特点：
+		1). Web是图形化的和易于导航的（navigate）
+	Web非常流行的一个很重要的原因就在于它可以在一页上同时显示色彩丰富的图形和文本的性能。在Web之前Internet上的信息只有文本形式。
+	Web可以提供将图形、音频、视频信息集合于一体的特性。同时，Web是非常易于导航的，只需要从一个连接跳到另一个连接，就可以在各页各站点之间进行浏览了。
+		2). Web与平台无关
+	无论你的系统平台是什么，你都可以通过Internet访问WWW。浏览WWW对你的系统平台没有什么限制。
+	无论从Windows平台、UNIX平台、Macintosh还是别的什么平台我们都可以访问WWW。对WWW的访问是通过一种叫做浏览器（browser）的软件实现的。
+	如Netscape 的Navigator、NCSA的Mosaic、Microsoft的Explorer等。
+		3). Web是分布式的
+	大量的图形、音频和视频信息会占用相当大的磁盘空间，我们甚至无法预知信息的多少。对于Web没有必要把所有信息都放在一起，信息可以放在不同的站点上。
+	只需要在浏览器中指明这个站点就可以了。使在物理上并不一定在一个站点的信息在逻辑上一体化，从用户来看这些信息是一体的。
+
+
+	2.什么是服务器
+	所谓的服务器是指安装了能够管理资源并为用户提供服务的计算机软件的pc机。我们常说的，文件服务器 ，是提供文件上传下载服务器的pc机。
+	数据库库服务器，就是安装了数据库软件，能帮我们管理数据资源，并且提供crud操作的pc机。
+
+	3.Web服务器
+	Web服务器一般指网站服务器，是指驻留于因特网上某种类型计算机的程序，
+	可以向浏览器等Web客户端提供文档，也可以放置网站文件，让网络用户浏览；可以放置数据文件，提供下载。
+
+
+
+
+1.HTTP协议
+	超文本传输协议 (HTTP-HyperText Transfer Protocol) 是一种详细规定了浏览器和万维网(web)服务器之间互相通信的规则，
+	通过因特网传送万维网文档的数据传送协议。HTTP是一个应用层协议，由请求和响应构成，是一个标准的客户端服务器模型。
+
+2.URL
+	统一资源定位符（Uniform Resource Locator，缩写为URL）是对可以从互联网上得到的资源的位置和访问方法的一种简洁的表示，是互联网上标准资源的地址。
+	互联网上的每个文件都有一个唯一的URL，它包含的信息指出文件的位置以及浏览器应该怎么处理它
+例如:
+	协议名称://服务器ip地址:端口号/访问资源路径
+	
+
+3.request消息
+	客户端发送到服务器端的请求消息,我们称之为请求(request),其实就是一个按照http协议的规则拼接而成的字符串
+	Request请求消息包含三部分: 请求行 消息报头 请求正文
+		第一部分 请求行
+			格式:
+			Method Request-URI HTTP-Version CRLF
+
+			各部分分别为：
+			Method表示请求方法；一般为GET或者POST
+			Request-URI是一个统一资源标识符；
+			HTTP-Version表示请求的HTTP协议版本；
+			CRLF表示回车和换行
+			
+			例如:
+			GET /test.html HTTP/1.1
+			
+
+		第二部分 消息报头 http header
+			参照: http消息报头.txt 文档
+
+			例如:
+			GET /test.html HTTP/1.1
+			Host: 127.0.0.1:9999
+			User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0
+			Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+			Accept-Language: zh-CN,en;q=0.8,zh;q=0.5,en-US;q=0.3
+			Accept-Encoding: gzip, deflate
+			Connection: keep-alive
+
+
+
+		第三部分 请求正文 http body
+			请求头和请求正文之间是一个空行，
+			这个行非常重要，它表示请求头已经结束，
+			接下来的是请求正文。请求正文中可以包含客户提交的字符串信息
+
+		注意:在第二部分header和第三部分body之间有个空行,
+		除非没有请求正文
+			
+4.response响应
+	服务器在接收和解释客户端的请求消息后，服务器会返回给客户端一个HTTP响应消息,我们称之为响应(response)。其实也是一个按照http协议的规则拼接而成的一个字符串
+	
+	HTTP响应也是由三个部分组成，分别是: 响应状态行、消息报头、响应正文
+
+	第一部分 响应状态行
+		格式如下：
+		HTTP-Version Status-Code Reason-Phrase CRLF
+
+HTTP-1.1 200 OK / HTTP1.1 404 NotFound
+ps.println();
+响应正文
+
+FOS  -->服务器端的本地文件发送给浏览器
+
+		各部分分别为：
+		HTTP-Version表示服务器HTTP协议的版本；
+		Status-Code表示服务器发回的响应状态代码；
+			参照: http协议状态码.txt 文档
+		Reason-Phrase表示状态代码的文本描述。
+		CRLF表示回车和换行
+
+		例如:
+		HTTP/1.1 200 OK
+
+
+
+	第二部分 消息报头
+		参照: http消息报头.txt 文档
+		什么是 MIME Type?媒体类型
+		首先，我们要了解浏览器是如何处理内容的。在浏览器中显示的内容有 HTML、有 XML、有 GIF、还有 Flash ……
+		那么，浏览器是如何区分它们，决定什么内容用什么形式来显示呢？答案是 MIME Type，也就是该资源的媒体类型。
+		媒体类型通常是通过 HTTP 协议，由 Web 服务器告知浏览器的，
+		更准确地说，是通过响应的消息报头里面的属性 Content-Type 来表示的，例如:Content-Type: text/HTML
+
+	第三部分 响应正文
+		响应正文就是服务器返回的资源的内容 

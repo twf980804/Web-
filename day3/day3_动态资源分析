@@ -1,0 +1,45 @@
+day3_动态资源分析
+
+动态资源:根据请求资源(URL)找到具体的实现类,在类中实现不同的功能
+
+动态资源
+	httpp://127.0.0.1:9999/a.txt
+	httpp://127.0.0.1:9999/loginServlet.action
+
+	loginServlet.action文件  不存在
+
+	如果请求资源在资源目录中不存在的,file = new FIle(resourcePath,error.html)
+
+//判断是否为动态资源
+	1.首先   该文件不存在
+	2.其次   该文件.action结尾
+	3.最后   该类名存在于项目中(配置文件loginServlet=com.briupp.servlet.loginServlet)
+
+	1.分析资源名,确定是否为动态资源(类)
+	2.获取类的全包名,然后实例化对象
+	3.通过对象调用方法,作出响应
+
+************Class  hellowServlet********
+method: serverice();
+	//按照Http协议发送响应
+	1.发送响应行
+	  Class ResponseImp {修改getResLine()}
+	2.发送响应头
+	  Class ResponseImp  修改getResHead()
+	3.发送空行  
+	4.发送响应体
+	//发送响应体  核心信息 helloworld
+		 ps.println("<html>");
+            ps.println("<head>");
+            ps.println("</head>");
+            ps.println("<body>");
+                ps.println("<h1>");
+                    ps.println("hello world");
+                ps.println("</h1>");
+            ps.println("</body>");
+        ps.println("</html>");
+
+
+
+
+

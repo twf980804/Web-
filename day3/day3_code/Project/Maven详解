@@ -1,0 +1,58 @@
+Maven
+1.什么是maven?
+	Maven是一个项目构建工具，能把项目抽象成一个POM（project object model），使用POM文件对项目进行构建、打包、文档化等操作。最重要的是解决了项目依赖的问题，简化项目环境搭建的过程；
+2.	为什么用Maven？
+Maven最核心的功能：解决复杂项目依赖的问题。怎么说？比如说你在项目中需要用到第三方jar包（如Mysql驱动），去哪找呢。如果一个还好，到一个复杂的项目通常由几十甚至上百个依赖组成，一个一个找怕不是累死？而Maven就解决了这个问题，比如Mysql驱动，只需要加入下面这一句即可：
+	groupid和artifactId被统称为“坐标”是为了保证项目唯一性而提出的，如果你要把你项目弄到maven本地仓库去，你想要找到你的项目就必须根据这两个id去查找。
+　　  groupId一般分为多个段，这里只说两段，第一段为域，第二段为公司名称。域又分为org、com、cn等等许多，其中org为非营利组织，com为商业组织。举个apache公司的tomcat项目例子：这个项目的groupId是org.apache，它的域是org（因为tomcat是非营利项目），公司名称是apache，artigactId是tomcat。
+　　  ArtifactID就是项目的唯一的标识符，实际对应项目的名称，就是项目根目录的名称。比如我创建一个项目，我一般会将groupId设置为com.ys，com表示域，ys是我个人姓名缩写，Artifact Id设置为hellomaven，表示你这个项目的名称是hellomaven，依照这个设置，你的包结构最好是com.ys.hellomaven打头的，如果有个StudentDao，它的全路径就是com.ys.hellomaven.dao.StudentDao
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>${mysql-connector.version}</version>
+	</dependency>
+
+	另一方面，项目的测试、打包、部署等操作，Maven也进行了简化，同时对项目的结构有了统一的规范和约定，如源码统一存放在src/main/java下，测试代码统一存放在src/test/java下，资源文件统一存放在src/resources下，编译后字节码存放在target目录下等等。
+3. dependencyManagementy
+　　1.只能出现在父pom里
+　　2.统一版本号
+　　3.只是依赖声明，并不直接依赖，需要时在子项目中在声明要使用依赖的GA信息，V信息可以省略.
+4. 依赖scope　　
+   1.compile：编译依赖范围，在编译，测试，运行时都需要，依赖范围默认值
+　　2.test：测试依赖范围，测试时需要。编译和运行不需要，如junit
+　　3.provided：已提供依赖范围，编译和测试时需要。运行时不需要,如servlet-api
+　　4.runtime：运行时依赖范围，测试和运行时需要。编译不需要,例如面向接口编程，JDBC驱动实现jar
+　　5. system：系统依赖范围。本地依赖，不在maven中央仓库，结合systemPath标签使用	
+5.jar包从哪来
+	依赖仓库有多种，位于Apache的中心仓库http://mvnrepository.com/，柜内外也有大量镜像库，如阿里云的Maven仓库，会与中心仓库进行同步；同时可以创建公司私库，用来发布和存放库以提高下载速度或存放公司私有的jar便于统一管理；
+	无论依赖的jar来自哪个仓库，在开发人员本地，Maven都会创建一个本地仓库用于缓存已经下载的jar，避免每次从仓库下载，默认地址为用户文件夹下的.m2隐藏文件夹中。
+
+6.Maven的安装、配置
+　　1. 在官网下载安装包：http://maven.apache.org/download.cgi
+　　2. 解压缩压缩包
+　　3. 配置环境变量MAVEN_HOME=maven的解压后的目录
+　　4. 在变量Path的开头增加"%MAVEN_HOME%\bin;"
+　　5. 在MAVEN_HOME/conf/setting.xml文件中通过<localRepository></localRepository>标签配置本地仓库的位置
+　　注 ：超级pom.xml的位置：MAVEN_HOME/lib/maven-model-build-3.3.9.jar/org/apache/maven/model/pom-4.0.0.xml
+7. 依赖关系查看
+进入工程根目录，在cmd中运行
+　　1.mvn dependency:tree 命令会列出依赖关系树及各级依赖关系
+　　2.mvn dependency:analyze 分析依赖关系
+8.搭建maven项目
+	在 eclipse 中集成 Maven 插件
+	  1.在 eclipse 指定 Maven 插件的位置
+	  Window->Preferences->Maven->Installations
+	  2.点击Add按钮,选择解压之后的maven程序,勾选,点击apply
+	  3.指定 conf/settings.xml 的位置，进而指定 Maven 本地仓库的位置
+	  Window->Preferences->Maven->User Settings
+	  指定setting.xml
+	eclipse 创建 Maven 工程
+　　   1.第一步：File-->New--->Maven Project
+	 2.第二步：勾上 Create a simple project ,然后点击 next
+	 3.第三步：填写 Group Id 和 Artifact Id
+
+	在idea中配置maven
+	  1. File-->Settings-->Build-->BuildTools-->Maven  --选择Maven本地仓库文件目录  设置setting.xml文件的位置-->apply
+	在idea中构建maven项目
+	   1.File > new > project  
+	   2.选择maven-->next,填写maven项目坐标值,点击next

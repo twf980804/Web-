@@ -1,0 +1,400 @@
+========================================================
+http请求消息报头 是如何生成的,主要有三种情况：
+
+1.浏览器自动生成的请求。绝大部分正常用户访问都是这类情况，只要是用户主动输入网址访问时发送的http请求，
+那这些头部字段都是浏览器自动生成的，比如host，cookie，user-agent, Accept-Encoding:等。
+
+2.浏览器插件/脚本，javascript脚本增加或者修改的header。JS能够控制浏览器发起请求，也能在这里增加一些header，
+但是考虑到安全和性能的原因，对JS控制 header的能力做了一些限制，比如host和cookie, user-agent等这些字段，JS是无法干预的。
+
+3.中间代理。如果用户请求要经过一些中间代理（比如运营商或者公司网关），中间代理能够查看和修改用户的全部数据，任何头部字段。除非我们使用了HTTPS。
+=========================================================
+
+
+HTTP消息报头包括普通报头、请求报头、响应报头、实体报头这四大类。
+ 
+每一个 报头域 都是由 名字+冒号+空格+值 组成，消息报头域的名字不区分大小写。它们的作用是描述 客户端或者服务器 的属性
+ 
+1.普通报头：即可用于请求，也可用于响应，是作为一个整体而不是特定资源与事务相关联。
+2.请求报头：允许客户端传递关于自身信息和希望的响应形式。
+3.响应报头：允许服务器传递关于自身信息的响应。
+4.实体报头：定义被传送资源的信息。即可用于请求，也可用于响应。
+ 
+1、普通报头 (General Header)
+
+在普通报头中，有少数报头域用于所有的请求和响应消息，但并不用于被传输的实体，只用于传输的消息对请求头域的扩展要求通讯双方都支持，
+如果存在不支持的请求头域，一般将会作为实体头域处理
+Cache-Control           缓存控制,通用头域包含请求和响应消息都支持的头域
+Connection              连接
+Date                    日期
+Pragma                  编译指示,注解
+Transfer-Encoding       传输译码,编码,告知接收端为了保证报文的可靠传输
+Upgrade                 升级
+Via                     通过,经由
+ 
+2、请求报头 (Request Headers)
+
+请求报头允许客户端向服务器端传递请求的附加信息以及客户端自身的信息对请求头域的扩展要求通讯双方都支持，如果存在不支持的请求头域，一般将会作为实体头域处理
+Accept
+Accept-Charset          指明请求的可以接受的字符集
+Accept-Encoding         指明请求的可以接受的编码格式
+Accept-Language         指明请求的可以接受的语言
+Authorization           授权
+Host                    主机
+User-Agent              用户代理
+From
+If-Modified-Since       从何时更改
+If-Match                假如匹配
+If-None-Match           假如不匹配
+If-Range                假如归类
+If-Unmodified-Since     假如不修改
+Max-Forwards            最大转发次数
+Proxy-Authorization     代理授权
+Range                   范围
+Referer                 参照页
+ 
+3、响应报头 (Response Headers)
+
+响应报头允许服务器传递不能放在状态行中的附加响应信息，以及关于服务器的信息和对Request-URI所标识的资源进行下一步访问的信息对响应头域的扩展要求通讯双方都支持，如果存在不支持的响应头域，一般将会作为实体头域处理
+ 
+
+Location                位置
+Server                  服务器
+WWW-Authenticate        www鉴定
+Age                     寿命
+Proxy-Authenticate      代理认证
+Public
+Retry-After             稍后重试
+Vary                    不同
+Warning                 警告
+ 
+4、实体报头 (Entity Header)
+
+请求和响应消息都可以传送一个实体。一个实体由实体报头域和实体正文组成，但并不是说实体报头域和实体正文要在一起发送，可以只发送实体报头域。实体报头定义了关于实体正文（eg：有无实体正文）和请求所标识的资源的元信息
+Content-Encoding        内容编码
+Content-Language        显示语言的设定
+Content-Length          内容长度,文件大小
+Content-Type            内容类型
+Last-Modified           最后修改时间
+Expires                 网站有效期
+Allow                   容许  GET PUT
+Content-Base            段体的基位置,输出目录
+Content-Location        内容,段体位置
+Content-MD5
+Content-Range           内容范围
+Etag                    标签
+extension-header        扩展标题
+ 
+Accept
+客户端可以处理的媒体类型，按优先级排序，在一个以逗号为分隔的列表中，可以定义多种类型和使用通配符。
+
+Accept: image/jpeg,image/png,*/*
+ 
+Accept-Language
+客户端接受的语言列表。
+
+Accept-Language: zh-cn,zh;q=0.5
+ 
+Accept-Ranges
+一个响应头标，它允许服务器指明：将在给定的偏移和长度处，为资源组成部分的接受请求。
+ 该头标的值被理解为请求范围的度量单位。
+
+Accept-Ranges: bytes
+     Accept-Ranges: none
+ 
+Accept-Encoding
+客户端编码。
+
+Accept-Encoding: gzip,deflate
+ 
+Accept-Charset
+客户端可以处理的字符集，按优先级排序，在一个以逗号为分隔的列表中，可以定义多种类型和使用通配符。
+
+Accept-Charset: iso-8859-1,*,utf-8
+ 
+Age
+允许服务器规定自服务器生成该响应以来所经过的时间长度，以秒为单位。
+ 该头标主要用于缓存响应。
+
+Age: 30
+ 
+Allow
+一个响应头标，它定义一个由位于请求URI中的次源所支持的HTTP方法列表。
+
+Allow: GET,PUT
+ 
+Authorization
+一个响应头标，用于定义访问一种资源所必需的授权（域和被编码的用户ID与口令）。
+
+Authorization: Basic YXV0aG9yOnBoaWw=
+ 
+Cache-Control
+缓存机制。
+ 在请求消息或响应消息中设置 Cache-Control并不会修改另一个消息处理过程中的缓存处理过程。
+ 请求时的缓存指令包括no-cache、no-store、max-age、 max-stale、min-fresh、only-if-cached，
+ 响应消息中的指令包括public、private、no-cache、no- store、no-transform、must-revalidate、proxy-revalidate、max-age。
+
+Cache-Control: max-age=3600
+ 
+各个消息中的指令含义如下：
+Public
+指示响应可被任何缓存区缓存。
+Private
+指示对于单个用户的整个或部分响应消息，不能被共享缓存处理。
+ 这允许服务器仅仅描述当用户的部分响应消息，此响应消息对于其他用户的请求无效。
+no-cache
+指示请求或响应消息不能缓存
+no-store
+用于防止重要的信息被无意的发布。在请求消息中发送将使得请求和响应消息都不使用缓存。
+max-age
+指示客户机可以接收生存期不大于指定时间（以秒为单位）的响应。
+min-fresh
+指示客户机可以接收响应时间小于当前时间加上指定时间的响应。
+max-stale
+指示客户机可以接收超出超时期间的响应消息。
+ 如果指定max-stale消息的值，那么客户机可以接收超出超时期指定值之内的响应消息。
+ 
+Content-Length
+表示实际传送的字节数
+ 只有当浏览器使用持久HTTP连接时才需要这个数据
+ 
+Content-Encoding
+文档的编码（Encode）方法。只有在解码之后才可以得到Content-Type头指定的内容类型。
+ 利用gzip压缩文档能够显著地减少HTML文档的下载时间
+ 
+Connection
+是否保存socket连接为开放。
+ 
+
+Connection: close
+     Connection: keep-alive
+ 
+Cookie
+网站cookie
+ 
+
+Cookie: PHPSESSID=d2f86046854e13ca02d9eef6c2dcb826
+ 
+Content-Type
+用于向接收方指示实体的介质类型(就是服务器返回给客户端的资源是什么类型的)
+ 
+
+Content-Type: text/html
+ 
+Content-Base
+一种定义基本URI的实体头标，为了在实体范围内解析相对URLs。
+ 如果没有定义Content-Base头标解析相对URLs，使用Content-Location URI（存在且绝对）或使用URI请求。
+ 
+
+Content-Base: Http://www.myweb.com
+ 
+Content-Location
+指定包含于请求或响应中的资源定位（URI）。
+ 对URL也作为被解析实体的相对URL的出发点。
+ 
+
+Content-Location: http://www.myweb.com/news
+ 
+Content-MD5
+实体的一种MD5摘要，用作校验和。
+ 发送方和接受方都计算MD5摘要，接受方将其计算的值与此头标中传递的值进行比较。
+ 
+Content-Range
+随部分实体一同发送；标明被插入字节的低位与高位字节偏移，也标明此实体的总长度。
+ 
+
+Content-Range: 1001-2000/5000
+ 
+Date
+Date头域表示消息发送的时间，时间的描述格式由rfc822定义。
+Date描述的时间表示世界标准时，换算成本地时间，需要知道用户所在的时区
+ 
+
+Date: Fri, 05 Dec 2008 03:17:21 GMT
+ 
+Expires
+指定实体的有效期, 过期时间
+ 
+
+Expires: Mon,05 Dec 2008 12:00:00 GMT
+ 
+ETag
+一种实体头标，它向被发送的资源分派一个唯一的标识符。
+ 对于可以使用多种URL请求的资源，ETag可以用于确定实际被发送的资源是否为同一资源。
+ 
+
+ETag: '208f-419e-30f8dc99'
+ 
+Form
+一种请求头标，给定控制用户代理的人工用户的电子邮件地址。
+ 
+
+From: webmaster@myweb.com
+ 
+Host
+被请求资源的主机名。对于使用HTTP/1.1的请求而言，此域是强制性的。
+ 
+
+Host: www.myweb.com
+ 
+If-Modified-Since
+记录页面最后修改时间，客户端往服务器发送
+ 
+
+If-Modified-Since: Wed, 03 Dec 2008 03:39:18 GMT
+ 
+If-Unmodified-Since
+只有自指定的日期以来，被请求的实体还不曾被修改过，才会返回此实体。
+ 
+
+If-Unmodified-Since: Mon,10PR 18:42:51 GMT
+ 
+If-Match
+如果包含于一个请求，指定一个或者多个实体标记。只发送其ETag与列表中标记区配的资源。
+ 
+
+If-Match: '208f-419e-308dc99'
+ 
+If-None-Match
+资源的ETag不与列表中的任何一个条件匹配，操作才执行。
+ 
+
+If-None-Match: "502d78280-2cc2-45d1c30522580"
+ 
+If-Range
+指定资源的一个实体标记，客户端已经拥有此资源的一个拷贝。必须与Range头标一同使用。
+ 如果此实体自上次被客户端检索以来，还不曾修改过，那么服务器只发送指定的范围，否则它将发送整个资源。
+ 
+
+Range: byte=0-499
+     If-Range: '208f-419e-30f8dc99'
+ 
+Keep-Alive
+持续连接，出现后继请求时，避免建立或者重新建立连接。
+ 
+
+Keep-Alive: 300
+ 
+Last-Modified
+指定被请求资源上次被修改的日期和时间。
+ 
+
+Last-Modified: Mon,10PR 18:42:51 GMT
+ 
+Location
+对于一个已经移动的资源，用于重定向请求者至另一个位置。
+ 与状态编码302（暂时移动）或者301（永久性移动）配合使用。
+ 
+
+Location: http://www2.myweb.com/index.jsp
+ 
+Max-Forwards
+一个用于TRACE方法的请求头标，以指定代理或网关的最大数目，该请求通过网关才得以路由。
+ 在通过请求传递之前，代理或网关应该减少此数目。
+ 
+
+Max-Forwards: 3
+ 
+Pragma
+用来包含实现特定的指令，最常用的是Pragma:no-cache。
+ 在HTTP/1.1协议中，它的含义和Cache-Control:no-cache相同
+ 
+Proxy-Authenticate
+类似于WWW-Authenticate，便是有意请求只来自请求链（代理）的下一个服务器的认证。
+ 
+
+Proxy-Authenticate: Basic realm-admin
+ 
+Proxy-Proxy-Authorization
+类似于授权，但并非有意传递任何比在即时服务器链中更进一步的内容。
+ 
+
+Proxy-Proxy-Authorization: Basic YXV0aG9yOnBoaWw=
+ 
+Public
+列表显示服务器所支持的方法集。
+ 
+
+Public: OPTIONS,MGET,MHEAD,GET,HEAD
+ 
+Range
+指定一种度量单位和一个部分被请求资源的偏移范围。
+ 
+
+Range: bytes=206-5513
+ 
+Refener
+一种请求头标域，标明产生请求的初始资源。对于HTML表单，它包含此表单的Web页面的地址。
+ 
+
+Refener: http://www.myweb.com/news/search.html
+ 
+Retry-After
+一种响应头标域，由服务器与状态编码503（无法提供服务）配合发送，以标明再次请求之前应该等待多长时间。
+ 此时间即可以是一种日期，也可以是一种秒单位。
+ 
+
+Retry-After: 18
+ 
+Server
+服务器名字
+ 
+
+Server: Apache/2.2.9 (Win32) PHP/5.2.6
+ 
+Transfer-Encoding
+一种通用头标，标明对应被接受方反向的消息体实施变换的类型
+ 当不能预先确定报文体的长度时，不可能在头中包含Content-Length域来指明报文体长度，
+ 此时就需要通过Transfer-Encoding域来确定报文体长度。
+ 通常情况下，Transfer-Encoding域的值应当为chunked,表明采用chunked编码方式来进行报文体的传输。
+chunked编码是HTTP/1.1 RFC里定义的一种编码方式，因此所有的HTTP/1.1应用都应当支持此方式。
+chunked编码的基本方法是将大块数据分解成多块小数据，每块都可以自指定长度
+ 
+
+Transfer-Encoding: chunked
+ 
+User-Agent
+用户浏览器信息,定义用于产生请求的软件类型（典型的如Web浏览器）
+ 
+
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.4) Gecko/2008102920 Firefox/3.0.4
+ 
+Upgrade
+允许服务器指定一种新的协议或者新的协议版本，与响应编码101（切换协议）配合使用。
+ 
+
+Upgrade: HTTP/2.0
+ 
+Vary
+用于表示使用服务器驱动的协商从可用的响应表示中选择响应实体
+ 
+
+Vary: Accept-Encoding
+ 
+Via
+一个包含所有中间主机和协议的通用头标，用于满足请求。
+ 
+
+Via: 1.0 fred.com, 1.1 wilma.com
+ 
+Warning
+用于提供关于响应状态补充信息的响应头标。
+ 
+
+Warning: 99 www.myweb.com Piano needs tuning
+ 
+www-Authenticate
+一个提示用户代理提供用户名和口令的响应头标，与状态编码401（未授权）配合使用。响应一个授权头标。
+ 
+
+www-Authenticate: Basic realm=zxm.mgmt
+ 
+X-Cache
+表示 http request 是由 proxy server 回的
+MISS 表示 proxy 代理
+HIT 表示 proxy 直接回应
+
+
+
+
+

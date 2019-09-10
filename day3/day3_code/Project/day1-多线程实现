@@ -1,0 +1,23 @@
+day1
+多线程实现
+封装一个专门用来连接客户端和做相应处理的方法
+
+封装属性
+	 //添加 客户端 套接字 成员
+    private Socket socket;
+    //客户端请求的方式
+    //private String method;
+    //服务器资源目录路径
+    private String path = "E:\\BD1904\\src\\com\\briup\\java\\Project\\resource";
+    private String errorFile = "error.html";
+    private String welFile = "welcom.html";
+
+    //给socket赋值 初始化
+    public MyRunnable(Socket socket){
+        this.socket = socket;
+    }
+封装获取url的方法
+	private String getUrl();
+
+封装发送响应的方法
+	private void sendResponse(String url);
